@@ -3,12 +3,13 @@
 ## Tasks
 
 - [ ] 1. Implement zero-gap auto-switching and second-tap stop
-  - [ ] 1.1 Write tests for Activities timing controller (start/switch/stop)
-  - [ ] 1.2 Implement one-tap start on activity tiles/buttons
-  - [ ] 1.3 Auto-stop current entry and start new at identical timestamp (no gap)
-  - [ ] 1.4 Second tap on active activity stops timer immediately
-  - [ ] 1.5 Ensure UI state reflects running/idle correctly in Activities tab
+  - [x] 1.1 Write tests for Activities timing controller (start/switch/stop)
+  - [x] 1.2 Implement one-tap start on activity tiles/buttons
+  - [x] 1.3 Auto-stop current entry and start new at identical timestamp (no gap)
+  - [x] 1.4 Second tap on active activity stops timer immediately
+  - [x] 1.5 Ensure UI state reflects running/idle correctly in Activities tab
   - [ ] 1.6 Verify all tests pass
+        ⚠️ Blocking issue: Local environment lacks Xcode to run tests here
 
 - [ ] 2. Enforce non-overlapping entries at the model layer
   - [ ] 2.1 Write tests for Core Data validation and insertion rules
@@ -36,4 +37,3 @@
   - [ ] 5.3 Restore running activity + elapsed time on next launch
   - [ ] 5.4 Ensure timers remain accurate across sessions
   - [ ] 5.5 Verify all tests pass
-
