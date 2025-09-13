@@ -69,13 +69,10 @@ Unlike SaaS time trackers requiring accounts, ActivityLog stores data on-device 
 - **Favorites and reorder:** Pin most-used activities and drag to reorder.
 - **Search:** Quickly find activities by name or group.
 - **Edit entries:** Fix start/stop times, reassign activity, or delete.
-- **On-device storage:** Core Data (SQLite) with lightweight migrations.
-- **Export:** Share CSV/JSON summaries via Share Sheet.
-- **Notifications (optional):** Gentle reminders when a timer runs unusually long.
+- **On-device storage:** Core Data with lightweight migrations.
 
 ### Reporting & Sharing
 
 - **Per-activity totals:** Rollups for day/week/month and custom ranges.
 - **Group rollups:** Aggregate time by activity groups to match reporting needs.
-- **Saved exports:** One-tap export presets (e.g., weekly manager report).
 

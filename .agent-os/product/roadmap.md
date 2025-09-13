@@ -3,7 +3,7 @@
 ## Phase 1: MVP
 
 **Goal:** Ship a fast, reliable iOS app for one-tap activity tracking with on-device summaries.
-**Success Criteria:** Track time across at least 10 activities/day; <1s tap-to-run; zero overlapping timers; export a weekly CSV.
+**Success Criteria:** Track time across at least 10 activities/day; <1s tap-to-run; zero overlapping timers; 
 
 ### Features
 
@@ -14,8 +14,6 @@
 - [ ] Edit entries (start/stop, reassign, delete) `M`
 - [ ] Search activities `S`
 - [ ] On-device storage via Core Data (SQLite) with migrations `M`
-- [ ] CSV export via Share Sheet `S`
-- [ ] Basic notifications to prevent long-running timers (optional) `S`
 
 ### Dependencies
 
@@ -30,13 +28,7 @@
 
 - [ ] Group rollups and saved reporting presets `M`
 - [ ] Advanced analytics: custom ranges, top activities, streaks `M`
-- [ ] Enhanced export (CSV/JSON) with filters `S`
 - [ ] Widgets and Quick Actions for faster starts `S`
-- [ ] Smart reminders (detect idle/meeting status via calendar, optional) `L`
-
-### Dependencies
-
-- Calendar access (optional), WidgetKit, Share extensions
 
 ## Phase 3: Scale & Polish
 
