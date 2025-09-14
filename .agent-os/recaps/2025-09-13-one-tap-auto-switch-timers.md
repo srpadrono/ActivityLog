@@ -1,15 +1,21 @@
-# 2025-09-13 Recap: One-Tap Auto-Switch Timers
+# 2025-09-13 Recap: One‑Tap Auto‑Switch Timers
 
 This recaps what was built for the spec documented at .agent-os/specs/2025-09-13-one-tap-auto-switch-timers/spec.md.
 
 ## Recap
 
-Implemented the core one-tap timer behavior: starting a timer with a single tap, zero-gap auto-switching when tapping a different activity, and immediate stop on a second tap of the same activity. Added a lightweight `ActivityTimerController` with deterministic tests and wired basic UI state in `ContentView` to reflect running vs idle.
+We implemented the core one‑tap timing flow with zero‑gap auto‑switching and second‑tap stop, added a 10s accidental‑tap guard, enforced non‑overlap at the insertion layer, and introduced basic persistence to restore a running activity across sessions. The Activities view now triggers light haptics on start/switch and a success notification on stop, and it always shows a persistent “Now Running” indicator.
 
-- ActivityTimerController: start, stop, and zero-gap switch with a single timestamp
-- Deterministic unit tests for start/switch/stop and UI-facing helpers
-- Simple activities UI tiles show running/idle state and allow tap-to-toggle
-- Tasks.md updated to reflect completed subtasks for Parent Task 1
+- Zero‑gap switch and second‑tap stop in `ActivityTimerController`
+- 10s short‑entry suppression on stop and switch
+- Non‑overlap insertion API with boundary equality allowed
+- Running‑state persistence via `UserDefaults` (MVP) and restoration on launch
+- Haptic feedback on start/switch/stop and persistent “Now Running” UI
+- Unit tests for guard, insertion rules, and persistence behavior
+
+Known limitations and follow‑ups:
+- Full Core Data model and edit/update validation are not wired yet
+- UI and full test suite execution require Xcode; cannot run in this environment
 
 ## Context
 
