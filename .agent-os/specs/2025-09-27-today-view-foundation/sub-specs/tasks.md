@@ -7,11 +7,11 @@
   - [x] 1.4 Verify all tests pass
   - [x] 1.5 Create a preview view to shwocase all the componets
 
-- [ ] 2. Compose TodayDashboardView and Summary modal
-  - [ ] 2.1 Write layout tests or preview assertions covering TodayDashboardView and SummaryModalView arrangements
-  - [ ] 2.2 Implement TodayDashboardView with header, favorites grid, recents scroller, timer banner, and summary trigger placement
-  - [ ] 2.3 Integrate SummaryModalView via sheet presentation with feature-flagged animation wrappers for selection and sheet snapping
-  - [ ] 2.4 Verify all tests pass
+- [x] 2. Compose TodayDashboardView and Summary modal
+  - [x] 2.1 Write layout tests or preview assertions covering TodayDashboardView and SummaryModalView arrangements
+  - [x] 2.2 Implement TodayDashboardView with header, favorites grid, recents scroller, timer banner, and summary trigger placement
+  - [x] 2.3 Integrate SummaryModalView via sheet presentation with feature-flagged animation wrappers for selection and sheet snapping
+  - [x] 2.4 Verify all tests pass
 
 - [ ] 3. Implement TodayViewModel and dummy controller harness
   - [ ] 3.1 Write unit tests for TodayViewModel intent methods and state publishing using mock repositories
