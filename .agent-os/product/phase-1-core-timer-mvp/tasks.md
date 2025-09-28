@@ -3,10 +3,11 @@
 ## Tasks
 
 - [ ] 1. Stand up TodayView layout layer in Presentation/Timer
-  - [ ] 1.1 Write layout tests for TodayView rendering core sections with stub view model
-  - [ ] 1.2 Implement TodayView SwiftUI screen composing TimerBanner, FavoritesGrid, RecentsScroller, Summary tiles
-  - [ ] 1.3 Replace ContentView body to host TodayView and inject preview/sample dependencies
+  - [x] 1.1 Write layout tests for TodayView rendering core sections with stub view model
+  - [x] 1.2 Implement TodayView SwiftUI screen composing TimerBanner, FavoritesGrid, RecentsScroller, Summary tiles
+  - [x] 1.3 Replace ContentView body to host TodayView and inject preview/sample dependencies
   - [ ] 1.4 Verify all tests pass
+    ⚠️ Blocking issue: Xcode command line tools lack full xcodebuild and the project is not a Swift Package, preventing local test execution.
 
 - [ ] 2. Implement TodayViewModel with published state and intents
   - [ ] 2.1 Write view model tests covering start/switch timer and summary refresh flows
@@ -31,4 +32,3 @@
   - [ ] 5.2 Implement FetchTodaySummary and ObserveRecents use cases with publisher outputs
   - [ ] 5.3 Assemble dependency graph (Environment/DI container) and wire into ActivityLogApp for runtime
   - [ ] 5.4 Verify all tests pass
-

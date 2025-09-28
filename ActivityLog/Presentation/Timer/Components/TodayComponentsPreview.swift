@@ -10,7 +10,7 @@ struct TodayComponentsPreview: View {
     private let summaryMetrics = SampleData.summaryMetrics
     private let summaryItems = SampleData.summaryItems
     private let timerModel = SampleData.timerModel
-    private let dashboardModel = SampleData.dashboardModel
+    private let dashboardState = SampleData.dashboardState
 
     var body: some View {
         ScrollView {
@@ -39,7 +39,10 @@ struct TodayComponentsPreview: View {
                     SummaryList(state: .idle(summaryItems))
                 }
                 showcaseSection("Today Dashboard") {
-                    TodayDashboardView(model: dashboardModel)
+                    NavigationStack {
+                        TodayView(viewModel: TodayView.PreviewViewModel(state: dashboardState))
+                    }
+                    .frame(maxWidth: .infinity, minHeight: 720)
                 }
             }
             .padding(.vertical, 32)
@@ -119,13 +122,17 @@ private enum SampleData {
         state: .active(activity: "Prototype Build", elapsed: "18m", remaining: "12m")
     )
 
-    static let dashboardModel = TodayDashboardView.Model(
+    static let dashboardState = TodayView.ViewState(
         title: "Today",
         subtitle: "Friday, Sep 27",
-        favorites: favoriteCards,
-        recents: .active(recents),
+        searchButtonLabel: "Search activities",
         timer: timerModel,
+        favoritesTitle: "Favorites",
+        favorites: favoriteCards,
+        recentsTitle: "Recents",
+        recents: .active(recents),
         summaryPeek: .active(title: "Today", metrics: summaryMetrics),
+        summaryListTitle: "Highlights",
         summaryList: .idle(summaryItems),
         summaryFooter: "Weekly trends update every 15 minutes."
     )

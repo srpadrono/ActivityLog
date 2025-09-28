@@ -6,13 +6,13 @@
 //
 
 import SwiftUI
-import Combine
-
-
 
 struct ContentView: View {
+    @StateObject private var viewModel = TodayView.PreviewViewModel()
 
     var body: some View {
-        Text("Activities")
+        NavigationStack {
+            TodayView(viewModel: viewModel)
+        }
     }
 }
