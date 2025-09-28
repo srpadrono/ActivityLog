@@ -1,27 +1,10 @@
-# Spec Requirements Document
+# ActivityLog Product Foundation
 
-> Spec: Today View Foundation
-> Created: 2025-09-27
-
-## Overview
-
-Deliver the Today tab exactly as the product team described so users see a consistent surface across docs and designs. The view presents content from top to bottom in this order:
-
-1. **Navigation Bar:** Title `Today` in bold at center, current date right-aligned, and a search icon button on the leading edge.
-2. **Search & Start Flow:** Tapping the search button (or pull-down gesture) opens a full-screen modal with a search field, segmented control (`All`, `Groups`, `Activities`), grouped results, quick-start buttons (`►`), and an empty state that routes to Manage Activities.
-3. **Segmented Sections:** A segmented control toggles between `Favourites` and `Recent Activities`, each showing a two-column grid of activity cards (icon, name) that highlight pinned entries; recents list up to ten activities.
-4. **Today's Summary Tile:** A full-width tile labeled `Today's Summary` displays total time spent per activity for the current date with accumulated totals.
-5. **Running Timer Banner:** A fixed banner pinned above the tab bar shows the active activity, elapsed time, and stop/pause actions whenever a timer is active or paused.
-
-This phase still focuses on reusable SwiftUI components, but the composition must mirror the ordered layout above so engineering, design, and product briefs stay aligned.
-
-## Product Foundation
-
-### Purpose
+## Purpose
 - Provide a single, quick-reference source that unifies architecture, UI surfaces, and behavioral use cases for ActivityLog.
 - Ensure engineers, designers, QA, and product partners share the same context when planning or implementing work.
 
-### Goals & Principles
+## Goals & Principles
 - Instant, offline-first responsiveness; no core flow depends on network availability.
 - Single source of truth for time entries and activity metadata through a dedicated data layer.
 - Declarative, testable presentation backed by MVVM and lightweight view models.
@@ -29,9 +12,9 @@ This phase still focuses on reusable SwiftUI components, but the composition mus
 - Scalable services and protocols that isolate domain logic from infrastructure and enable future sync/analytics.
 - UI surfaces that expose the same mental model as the architecture: quick start, review, manage, and configure.
 
-### System Overview
+## System Overview
 
-#### Product Blueprint
+### Product Blueprint
 ```
 SwiftUI Views ─┬─► View Models (ObservableObject)
                │
@@ -47,7 +30,7 @@ SwiftUI Views ─┬─► View Models (ObservableObject)
                   Core Data Stack
 ```
 
-#### Navigation Skeleton
+### Navigation Skeleton
 ```
 Root Tab Bar
 ├─ Today
@@ -71,7 +54,7 @@ Root Tab Bar
    └─ About
 ```
 
-#### Folder Structure (Proposed)
+### Folder Structure (Proposed)
 ```
 ActivityLog/
 ├─ Application/
@@ -98,20 +81,20 @@ ActivityLog/
    └─ Testing/
 ```
 
-### Architecture Layers
+## Architecture Layers
 - **Presentation:** SwiftUI views bound to `ObservableObject` view models. Views emit intents (tap, search, edit) that map to domain use cases. Coordinators own navigation routes to keep view models pure.
 - **Domain:** Use-case structs (`StartTimer`, `FetchSummary`, etc.) encode business rules, accept repositories via protocols, and return domain models ready for presentation.
 - **Data:** Repository implementations translate domain requests to Core Data operations, manage batching, and return immutable domain structs.
 - **Services:** Cross-cutting utilities (date formatting, CSV export, analytics hooks) live behind service protocols injected into use cases.
 
-### Feature Modules & Surface Mapping
+## Feature Modules & Surface Mapping
 - **Timer Module** `(Presentation/Timer)`: Today dashboard, search sheet, running timer banner. View models manage active timers and quick actions; use cases (`StartTimer`, `SwitchTimer`, `ObserveActiveTimer`) coordinate with the Timer repository to prevent overlaps.
 - **Activity Catalog Module** `(Presentation/Catalog)`: Manage Activities tab and detail sheets. Handles `CreateActivityGroup`, `PinFavorite`, `SearchActivity`, and exposes grids for favorites and recents.
 - **History & Summaries Module** `(Presentation/History)`: Day/Week/Month views. Summaries use `FetchDailySummary`, `FetchWeeklyGroupRollup`, and `FetchMonthlyTrend`, surfacing insight cards, timelines, rollups, and charts.
 - **Entry Maintenance Module** `(Presentation/EntryMaintenance)`: Edit sheet across Today and History flows; use cases (`UpdateEntryWindow`, `ReassignEntry`) enforce validation before writes.
 - **Data Ownership & Export Module** `(Settings)`: Export card and share sheet tie into `GenerateExport` and CSV builder services. Future sync toggles plug into the same service layer without touching presentation.
 
-### Primary Screens & Responsibilities
+## Primary Screens & Responsibilities
 - **Today Dashboard:** Presents favorites/recent grids, summary tile, and running timer banner. Search icon or pull-down opens Search & Start modal leveraging the same activity data sources as the dashboard.
 - **Search & Start Flow:** Full-screen modal with segmented search results, quick-start shortcuts, and a path to create new activities.
 - **History:** Segmented control across Day/Week/Month with timeline, group rollup, and trend chart views driven by summary calculators.
@@ -119,7 +102,7 @@ ActivityLog/
 - **Entry Maintenance Sheet:** Inline editing of entries with validation messaging and destructive actions handled via coordinator alerts.
 - **Settings & Export:** Houses export configuration, on-device data messaging, and placeholders for future sync and help surfaces.
 
-### Shared Components Inventory
+## Shared Components Inventory
 
 | Component | Description | Used In |
 |-----------|-------------|---------|
@@ -131,7 +114,7 @@ ActivityLog/
 | `EditableListRow` | Swipe-enabled row with edit/delete | Manage Activities, History Day |
 | `FavoritesGrid` | Drag-and-drop reorder grid | Favorites editor |
 
-### State, Data & Background Behavior
+## State, Data & Background Behavior
 - View models publish state structs (e.g., `TimerViewState`) to keep rendering deterministic and testable.
 - Intents call use cases asynchronously via Combine or Swift Concurrency; results map to published state updates.
 - Core Data stack: lightweight container with main/read context, background write contexts, and swap-in in-memory stores for testing.
@@ -139,93 +122,53 @@ ActivityLog/
 - Background refresh reconciles timers on foreground events; significant time change notifications trigger use cases to avoid drift.
 - Future sync adapters can observe repository outputs and push externally without presentation changes.
 
-### Interaction Flows
+## Interaction Flows
 1. **Start Timer:** Tap `ActivityCard` → animation feedback → `TimerBanner` updates → Today summary refreshes.
 2. **Switch Timer:** Tap another card → previous timer auto-stops → toast confirms switch → state propagates to history.
 3. **Edit Entry:** Swipe entry in History → `Edit` → Entry Maintenance sheet → save routes through `UpdateEntryWindow` use case, refreshing listings.
 4. **Export Data:** Settings → `Export` card → choose period/format → `GenerateExport` builds file → share sheet presented.
 
-### Use Case Scenarios
+## Use Case Scenarios
 
-#### Timer Management
+### Timer Management
 - **Start tracking from Today:** With no active timer, tapping a favorite begins a new entry, updates the banner, and highlights the active card.
 - **Switch without overlap:** Tapping a different favorite stops the current timer, starts the new one, and splits time correctly in the summary.
 - **Start from search:** Selecting a search result stops any running timer, starts the selected activity, and dismisses the modal.
 - **Background continuity:** A running timer continues while the device is locked, and elapsed time is accurate on return with no duplicates.
 
-#### Activity Catalog Management
+### Activity Catalog Management
 - **Create group and activity:** Adding a "Hiring" group with "Candidate Interview" surfaces the group immediately and exposes the activity for pinning/search.
 - **Pin and reorder favorites:** Favoriting "Performance Review" and dragging it above "Weekly 1:1" persists ordering across launches.
 - **Search the catalog:** Typing "bug" filters activities/groups to relevant matches and starting one auto-stops any active timer.
 
-#### History & Summaries
+### History & Summaries
 - **Review daily totals:** The Today summary panel lists each activity with accurate durations and expandable recent entries.
 - **Inspect weekly rollups:** Week view aggregates by group, allows drill-down into activities, and totals align with the displayed groups.
 - **Compare monthly trends:** Month view charts weekly contributions for a selected activity and supports switching without leaving the view.
 
-#### Entry Maintenance
+### Entry Maintenance
 - **Adjust time window:** Editing a "Code Review" entry shifts the start time while preserving integrity and updating daily totals.
 - **Reassign activity:** Changing an entry from "Standup" to "Bug Triage" keeps duration intact and updates all rollups.
 - **Delete incorrect entry:** Removing an erroneous entry immediately updates history and summary totals.
 
-#### Data Ownership & Sharing
+### Data Ownership & Sharing
 - **Offline access:** In airplane mode, users can view history, manage timers, and keep data on-device without prompts.
 
-### Styling & Accessibility
+## Styling & Accessibility
 - Color palette adapts via semantic colors; dark mode supported automatically.
 - Typography: SF Pro (Title2 headers, Headline cards, Footnote metadata).
 - Icons: SF Symbols (regular weight) with consistent tinting.
 - Animations: Spring transitions on timer start/stop; matched geometry for card-to-sheet transitions.
 - Accessibility: Dynamic Type support (grids collapse to one column), tap targets ≥ 44pt, VoiceOver labels include activity group context, color cues paired with icons.
 
-### Testing & Quality Strategy
+## Testing & Quality Strategy
 - **Unit tests:** View models and use cases with mocked repositories to check logic (auto-switching, validation).
 - **Integration tests:** In-memory Core Data stack validating repository queries and exports.
 - **UI tests:** XCTest with SwiftUI accessibility identifiers covering start/switch timer, edit entry, export flows.
 
-### Future Extensions
+## Future Extensions
 - **Sync Adapter:** Optional `CloudSyncService` listening to repositories for iCloud integration.
 - **Automation Hooks:** Widgets and Shortcuts reuse domain use cases through thin intent handlers.
 - **Analytics:** Injectable analytics service for optional usage tracking.
 - **UI Enhancements:** Lock screen widgets, Apple Watch companion, productivity streaks within History views.
-
-## User Stories
-
-### Start tracking from favorites
-
-As a time-tracking user, I want to launch a timer with one tap from the favorites grid so that I can quickly capture my current activity without configuration friction.
-
-A two-column grid of favorite activity cards is visible on load, each card shows icon, title, and today's total. Tapping a card animates the selection and routes intent to the dummy controller which simulates timer start feedback.
-
-### Monitor current activity in context
-
-As a time-tracking user, I want a persistent banner that displays my active timer so that I always see elapsed time and can stop or switch without leaving the Today view.
-
-A running timer banner stays pinned above the tab bar, reflecting the dummy controller's active state, with controls to stop or switch that feed mocked responses back into the UI.
-
-### Peek at daily progress
-
-As a time-tracking user, I want to slide up a summary sheet to review today's totals so that I can confirm time allocation before the end of the day.
-
-A collapsible summary component anchors to the bottom of the screen, exposing total logged time and top activities. Pulling it upward expands a modal with the full summary list, all driven by placeholder data until real repositories connect.
-
-## Spec Scope
-
-1. **UI Component Library** - Build SwiftUI components for activity cards, recents row, timer banner, and summary blocks with mocked data bindings.
-2. **Today View Composition** - Assemble the Today dashboard using the new components, aligned with layout and animation guidance from the product foundation.
-3. **Dummy Controller Harness** - Provide a lightweight view controller and view model scaffolding that simulate timer state transitions for component testing.
-4. **Coordinator Integration Hooks** - Stub navigation routes for search sheet and summary modal so coordinators can attach real flows later.
-5. **Mock Repository Interfaces** - Define placeholder protocols and in-memory data providers that mirror future repository signatures for the Today view.
-
-## Out of Scope
-
-- Implementing real timer persistence, Core Data writes, or synchronization logic.
-- Building History, Manage Activities, or Settings tabs beyond navigation stubs.
-- Finalizing visual assets, haptic tuning, or accessibility copy beyond baseline labels.
-
-## Expected Deliverable
-
-1. Running Today tab in the app that exercises the new components with dummy data and controller logic.
-2. SwiftUI previews or snapshots demonstrating the favorites grid, timer banner, and summary interactions in isolation.
-3. Coordinator and repository interfaces ready for subsequent wiring to real use cases without refactoring the newly created views.
 
