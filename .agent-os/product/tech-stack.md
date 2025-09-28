@@ -1,14 +1,15 @@
 # Technical Stack
 
-- application_framework: iOS app — SwiftUI (Swift 5.10+), MVVM
-- database_system: Core Data
-- import_strategy: n/a (SPM for dependencies)
-- ui_component_library: SwiftUI + SF Symbols
-- fonts_provider: Apple San Francisco (system)
-- icon_library: SF Symbols
-- application_hosting: Apple App Store distribution; local device runtime
-- database_hosting: On-device (Core); iCloud sync (optional, TBD)
-- asset_hosting: App bundle
-- deployment_solution: Xcode + TestFlight; CI: GitHub Actions (optional)
-- code_repository_url: TBD
+- application_framework: iOS 17 SwiftUI app (Swift 5.10)
+- presentation_pattern: SwiftUI views with planned MVVM view models
+- state_management: Local sample data stubs; Today view model pending
+- dependency_manager: Swift Package Manager (no third-party packages yet)
+- database_system: Core Data (planned; not implemented)
+- persistence_status: Timer data not yet persisted; previews rely on static models
+- networking: n/a (offline-first scope)
+- testing_framework: Swift Testing (`Testing` module with `#expect` assertions)
+- build_tooling: Xcode 16.x, SwiftUI previews for component verification
+- continuous_integration: TBD (GitHub Actions candidate)
+- deployment_solution: Xcode + TestFlight (future)
+- analytics_monitoring: n/a (privacy-first)
 
